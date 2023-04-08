@@ -5,6 +5,7 @@ arg2 <- args[2]
 library(gdsfmt)
 library(SeqArray)
 library(readr)
+library(dplyr)
 
 agds.file <- arg1
 annot.file <- arg2
@@ -24,11 +25,16 @@ my_df <- data.frame(list(
 
 FunctionalAnnotation <- read_csv(annot.file,show_col_types=FALSE)
 dim(FunctionalAnnotation)
-FunctionalAnnotation <- merge(my_df,FunctionalAnnotation,by="VarInfo",all.x=TRUE)
-dim(FunctionalAnnotation)
+
+result <- my_df %>% 
+  left_join(FunctionalAnnotation, by = "VarInfo") %>% 
+  arrange(match(VarInfo, my_df$VarInfo))
+
+# FunctionalAnnotation <- merge(my_df,FunctionalAnnotation,by="VarInfo",all.x=TRUE)
+dim(result)
 
 Anno.folder <- index.gdsn(genofile, "annotation/info")
-add.gdsn(Anno.folder, "FAVORFullDB", val=FunctionalAnnotation, compress="LZMA_ra", closezip=TRUE)
+add.gdsn(Anno.folder, "FAVORFullDB", val=result, compress="LZMA_ra", closezip=TRUE)
 genofile
 
 seqClose(genofile)

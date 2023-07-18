@@ -70,9 +70,9 @@ fi
 
 # check if FAVOR env is loaded
 if [ "$CONDA_DEFAULT_ENV" != "FAVOR" ]; then
-    echo "Error: The 'FAVOR' conda environment is not currently activated."
+    echo "Warning: The 'FAVOR' conda environment is not currently activated."
     echo "activate via 'conda activate FAVOR' or contact craut@umich.edu for help setting it up"
-    exit 1
+    # exit 1
 fi
 
 # Run your code with the provided file names
